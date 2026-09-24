@@ -44,3 +44,5 @@ cd mcp-server && pip install -r requirements.txt && python server.py
 Visita tecnica Equinix SP06 - Sao Paulo com Victor Arnaud
 
 Foguete nao tem re.
+---
+**EN: [README_EN.md](./README_EN.md)**
