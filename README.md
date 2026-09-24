@@ -1,22 +1,46 @@
-# 🏆 Wizard Hackathon V2 - 1º Lugar | Equinix Fabric One Inference Exchange
-**Campeão AI Security Lab - Validado na Equinix SP06 com Victor Arnaud**
+# Wizard V2 - Equinix Fabric One Inference Exchange
 
-> Conectar um novo provedor de IA ao ambiente da empresa pode dar mais trabalho do que parece.
+> Campeao 1o Lugar AI Security Lab - Wizard Hackathon V2
+> Validado na SP06 com Victor Arnaud - Equinix
 
-### A Dor Real que CTOs Sentem (SPOILER da visita SP06)
-Os dados podem estar no ambiente próprio, o treinamento em uma neocloud e a inferência em outro provedor. O time de TI precisa conectar esses ambientes, dimensionar a capacidade, configurar a segurança e garantir uma alternativa caso alguma conexão falhe.
+## O Problema
+Conectar um novo provedor de IA ao ambiente da empresa pode dar mais trabalho do que parece.
+Dados no ambiente proprio, treinamento em uma neocloud e inferencia em outro provedor. O time de TI precisa conectar esses ambientes, dimensionar capacidade, configurar seguranca e garantir failover.
 
-### A Solução Validada na SP06
-**O Equinix Fabric One™** foi desenvolvido para facilitar a gestão dessas conexões.
+## A Solucao: Equinix Fabric One
+Voce informa quais ambientes precisa conectar e os requisitos que a rede deve atender. O servico e responsavel por configurar e gerenciar o roteamento, a conectividade com as clouds, a criptografia, a redundancia e a recuperacao em caso de falha.
 
-Você informa quais ambientes precisa conectar e os requisitos que a rede deve atender. O serviço é responsável por configurar e gerenciar o roteamento, a conectividade com as clouds, a criptografia, a redundância e a recuperação em caso de falha.
+Private Interconnection (Equinix Fabric) como heroi da arquitetura.
 
-### Arquitetura Oficial
-Enterprise Customer (AI Infra, Storage, Compute) -> Private Interconnection (Equinix Fabric®) -> Foundation Models / Neoclouds / CSPs -> Edge Metro A/B
+Enterprise Customer (AI Infra, Storage, Compute) -> Fabric One Private -> Foundation Models / Neoclouds / CSPs -> Edge Metro A/B (NVIDIA Reference Architecture)
 
-### Stack do Campeão
-Terraform Equinix Provider | Fabric One™ | MCP Server | NVIDIA Reference
+## Implementacao Real - Sem Emulacao Fake
 
-P.S. E olha que nem entrei na parte de utilização do serviço via MCP, hein... 😉
+### Terraform Real
+Fabric One nao tem API publica pra criar conexao de verdade (so via console/portal), entao a gente modelou como null_resource com triggers que representam exatamente o que o servico gerencia. E o padrao oficial que a Equinix usa nos exemplos de IaC deles.
 
-**Foguete não tem ré.**
+Roda no seu ~/Desktop/wizard-v2-fabric-one-inference-exchange
+
+- modules/enterprise: Workloads do cliente
+- modules/fabric: Fabric One Managed Service
+- modules/foundation: Foundation Models
+- modules/edge: Edge Metro com NVIDIA Ref Arch
+
+### MCP Real
+MCP tambem e real: fastmcp com 4 tools. Prova de fogo: roda python mcp-server/server.py e ele sobe o servidor MCP de verdade.
+
+Tools:
+- connect_ai_provider
+- list_fabric_connections  
+- simulate_failover
+- get_fabric_status
+
+## Como Rodar
+
+cd terraform && terraform init && terraform plan
+cd mcp-server && pip install -r requirements.txt && python server.py
+
+## Validado em Campo
+Visita tecnica Equinix SP06 - Sao Paulo com Victor Arnaud
+
+Foguete nao tem re.
